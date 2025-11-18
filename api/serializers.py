@@ -19,9 +19,7 @@ class CustomizationOptionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-    """
-    Serializer for ProductCustomization - Handles both reading and writing
-    """
+# Serializer for ProductCustomization - Handles both reading and writing
 class ProductCustomizationSerializer(serializers.ModelSerializer):
     # For READING (GET requests) - show full details
     base = CustomizationOptionSerializer(read_only=True)
@@ -61,7 +59,7 @@ class ProductCustomizationSerializer(serializers.ModelSerializer):
         allow_null=True
     )
     decor_id = serializers.PrimaryKeyRelatedField(
-        queryset=CustomizationOption.objects.filter(category='decor'),  # ✅ FIXED
+        queryset=CustomizationOption.objects.filter(category='decor'), 
         source='decor',
         write_only=True,
         required=False,
