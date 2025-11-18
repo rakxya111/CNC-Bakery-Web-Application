@@ -4,12 +4,17 @@ from django.db import models
 
 
 class TimeStampModel(models.Model):
+    
+    # Abstract base model to add timestamps to other models
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        abstract = True
+        abstract = True # This means it won't create its own table
 
+
+# Product Model : Base Bakery Products (Cakes , Pastries , etc.)
 class Product(models.Model):
     product_name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
@@ -24,6 +29,9 @@ class Product(models.Model):
     
 
 class CustomizationOption(models.Model):
+    """ 
+    CustomizationOption Model - Available options for customizing products. 
+    """
     CATEGORY_CHOICES = [
         ('base', 'Base'),
         ('size', 'Size'),
@@ -50,7 +58,9 @@ class ProductCustomization(models.Model):
     message = models.CharField(max_length=200, blank=True, null=True)
     total_price = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
 
-    def calculate_total(self):
+
+# Calculate total price including base product + all customization extras
+    def calculate_total(self):    
         base_price = self.product.price
         extras = sum([
             (self.base.extra_price if self.base else 0),
@@ -62,6 +72,7 @@ class ProductCustomization(models.Model):
         return base_price + extras
     
     def save(self, *args, **kwargs):
+        # Auto-calculate total_price before saving
         self.total_price = self.calculate_total()
         super().save(*args, **kwargs)
     
