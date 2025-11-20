@@ -8,7 +8,7 @@ class ProductSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Product
-        fields = '__all__'  # Include all fields
+        fields = '__all__'  
 
 class CustomizationOptionSerializer(serializers.ModelSerializer):
     """
